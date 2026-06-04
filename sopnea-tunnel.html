@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SOPNEA — Logiciel de RDV médical</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#1A2453;
+    --storm:#53648A;
+    --ice:#E7ECF6;
+    --mauve:#6557CC;
+    --lavender:#A18CF5;
+    --stone:#D9D4CD;
+    --line:#dfe3ee;
+    --radius:14px;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:'Sora',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--ink);background:#fff;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .container{max-width:1080px;margin:0 auto;padding:0 24px}
+  section{padding:76px 0}
+  a{text-decoration:none;color:inherit}
+
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .topbar .container{display:flex;align-items:center;justify-content:space-between;height:66px;padding-top:0;padding-bottom:0}
+  .logo{font-weight:800;font-size:22px;letter-spacing:.04em;color:var(--ink);display:flex;align-items:center;gap:10px}
+  .logo .logo-mark{width:30px;height:auto;display:block;flex-shrink:0}
+  .logo .dot{width:9px;height:9px;border-radius:50%;background:var(--mauve);display:inline-block;margin-top:8px}
+  .topbar .cta-mini{background:var(--mauve);color:#fff;padding:11px 20px;border-radius:10px;font-size:14px;font-weight:600;transition:background .15s}
+  .topbar .cta-mini:hover{background:#5648b5}
+
+  .hero{background:linear-gradient(150deg,var(--mauve) 0%,#7165d6 55%,var(--lavender) 130%);color:#fff;position:relative;overflow:hidden}
+  .hero::after{content:'';position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(161,140,245,.55) 0%,transparent 70%);top:-180px;right:-120px;pointer-events:none}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;position:relative;z-index:2}
+  .pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);color:#fff;font-size:13px;font-weight:600;padding:7px 15px;border-radius:30px;margin-bottom:22px;border:1px solid rgba(255,255,255,.22)}
+  .pill .pdot{width:7px;height:7px;border-radius:50%;background:#fff;animation:pulse 1.8s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  h1{font-size:47px;line-height:1.08;font-weight:800;letter-spacing:-.03em;margin-bottom:20px;color:#fff}
+  h1 .hl{color:#E7ECF6;text-decoration:underline;text-decoration-color:var(--lavender);text-underline-offset:6px;text-decoration-thickness:4px}
+  .hero-sub{font-size:18px;color:rgba(255,255,255,.88);max-width:520px;margin-bottom:28px}
+  .hero-stats{display:flex;gap:30px;margin-top:32px;flex-wrap:wrap}
+  .hstat .n{font-size:32px;font-weight:800;color:#fff;letter-spacing:-.02em}
+  .hstat .n em{color:#E7ECF6;font-style:normal}
+  .hstat .l{font-size:13px;color:rgba(255,255,255,.78)}
+
+  .form-card{background:#fff;border-radius:20px;padding:34px;box-shadow:0 30px 70px -24px rgba(26,36,83,.5)}
+  .form-card h3{font-size:21px;font-weight:700;margin-bottom:6px;color:var(--ink)}
+  .form-card .fc-sub{font-size:14px;color:var(--storm);margin-bottom:24px}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--ink)}
+  .field input,.field select{width:100%;padding:13px 15px;border:1.5px solid var(--line);border-radius:11px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink);transition:border .15s;outline:none}
+  .field input::placeholder{color:#aab1c6}
+  .field input:focus,.field select:focus{border-color:var(--mauve)}
+  .btn-primary{display:block;width:100%;background:linear-gradient(135deg,var(--mauve) 0%,var(--lavender) 130%);color:#fff;border:none;padding:16px;border-radius:12px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:10px;transition:transform .12s,box-shadow .12s;box-shadow:0 10px 24px -8px rgba(101,87,204,.6)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 30px -8px rgba(101,87,204,.7)}
+  .fc-trust{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:18px;font-size:12px;color:var(--storm);flex-wrap:wrap}
+  .fc-trust span{display:flex;align-items:center;gap:5px}
+  .check{color:var(--mauve);font-weight:800}
+
+  .sec-head{text-align:center;max-width:660px;margin:0 auto 48px}
+  .sec-head .tag{display:inline-block;background:var(--ice);color:var(--mauve);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:6px 14px;border-radius:8px;margin-bottom:16px}
+  .sec-head h2{font-size:35px;font-weight:800;letter-spacing:-.02em;line-height:1.15;margin-bottom:12px;color:var(--ink)}
+  .sec-head p{font-size:17px;color:var(--storm)}
+
+  .ps-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .ps-col{border:1px solid var(--line);border-radius:var(--radius);padding:30px}
+  .ps-col.problem{background:#fff}
+  .ps-col.solution{background:var(--ice);border-color:rgba(101,87,204,.3)}
+  .ps-col h4{font-size:18px;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:11px}
+  .ps-col.problem h4{color:var(--storm)}
+  .ps-col.solution h4{color:var(--mauve)}
+  .ps-icon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+  .problem .ps-icon{background:#eef0f5;color:var(--storm)}
+  .solution .ps-icon{background:var(--mauve);color:#fff}
+  ul.list{list-style:none}
+  ul.list li{padding:11px 0;font-size:15px;display:flex;gap:11px;border-bottom:1px solid var(--line);color:var(--ink)}
+  ul.list li:last-child{border-bottom:none}
+  .problem ul.list li::before{content:'\2715';color:#b4bacb;font-weight:700;flex-shrink:0}
+  .solution ul.list li::before{content:'\2713';color:var(--mauve);font-weight:800;flex-shrink:0}
+
+  .how{background:var(--ink);color:#fff}
+  .how .sec-head h2{color:#fff}
+  .how .sec-head p{color:#aeb6cf}
+  .how .sec-head .tag{background:rgba(161,140,245,.18);color:var(--lavender)}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .step{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:30px}
+  .step-n{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--mauve),var(--lavender));color:#fff;font-weight:800;font-size:19px;display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+  .step h5{font-size:17px;font-weight:700;margin-bottom:8px;color:#fff}
+  .step p{font-size:14px;color:#aeb6cf}
+
+  .testi{background:var(--stone)}
+  .quote-box{max-width:780px;margin:0 auto;text-align:center}
+  .quote-box .q{font-size:27px;line-height:1.4;font-weight:600;letter-spacing:-.01em;margin-bottom:26px;color:var(--ink)}
+  .quote-box .q em{color:var(--mauve);font-style:normal}
+  .author{display:flex;align-items:center;justify-content:center;gap:14px}
+  .avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--mauve),var(--lavender));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px}
+  .author .meta{text-align:left}
+  .author .name{font-weight:700;font-size:15px;color:var(--ink)}
+  .author .role{font-size:13px;color:var(--storm)}
+
+  .ref{background:var(--ice)}
+  .ref-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:8px}
+  .ref-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px 18px;text-align:center;transition:transform .15s,border-color .15s,box-shadow .15s}
+  .ref-card:hover{transform:translateY(-5px);border-color:var(--mauve);box-shadow:0 18px 40px -20px rgba(101,87,204,.5)}
+  .ref-card .rt{font-size:13px;font-weight:700;color:var(--mauve);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+  .ref-card .rn{font-size:40px;font-weight:800;color:var(--ink);line-height:1}
+  .ref-card .rn small{font-size:14px;color:var(--storm);font-weight:600;display:block;margin-top:2px}
+  .ref-card .rl{font-size:13px;color:var(--storm);margin-top:12px;line-height:1.45}
+
+  .final{background:linear-gradient(135deg,var(--mauve) 0%,var(--lavender) 130%);color:#fff;text-align:center;position:relative;overflow:hidden}
+  .final::before{content:'';position:absolute;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.12) 0%,transparent 70%);bottom:-200px;left:-100px}
+  .final .container{position:relative;z-index:2}
+  .final h2{font-size:39px;font-weight:800;letter-spacing:-.02em;margin-bottom:14px;color:#fff}
+  .final p{font-size:18px;opacity:.94;max-width:560px;margin:0 auto 30px}
+  .btn-white{display:inline-block;background:#fff;color:var(--mauve);padding:17px 42px;border-radius:13px;font-size:17px;font-weight:700;box-shadow:0 16px 40px -12px rgba(26,36,83,.5);transition:transform .12s}
+  .btn-white:hover{transform:translateY(-2px)}
+  .final .micro{margin-top:16px;font-size:13px;opacity:.88}
+
+  footer{background:var(--ink);color:#8e96b5;padding:42px 0;text-align:center;font-size:13px}
+  footer .logo{justify-content:center;font-size:19px;margin-bottom:10px;color:#fff}
+  footer .logo .dot{background:var(--lavender)}
+
+  @media(max-width:860px){
+    .hero-grid{grid-template-columns:1fr;gap:36px}
+    h1{font-size:37px}
+    .ps-grid{grid-template-columns:1fr}
+    .steps{grid-template-columns:1fr}
+    .ref-grid{grid-template-columns:1fr 1fr}
+    .sec-head h2,.final h2{font-size:29px}
+    .quote-box .q{font-size:22px}
+  }
+  @media(max-width:480px){.ref-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="container">
+      <div class="logo"><svg class="logo-mark" viewBox="310 380 680 540" xmlns="http://www.w3.org/2000/svg" aria-label="SOPNEA"><polygon points="320,455 645,388 905,395 885,700 978,905 845,770 360,878" fill="#1A2453"/></svg>SOPNEA<span class="dot"></span></div>
+      <a href="#inscription" class="cta-mini">Essai gratuit 30 jours</a>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="pill"><span class="pdot"></span> Déployé avec Full Impulsion&trade;</div>
+        <h1>Remplissez votre agenda médical <span class="hl">sans lever le téléphone.</span></h1>
+        <p class="hero-sub">SOPNEA, le logiciel de prise de RDV qui élimine les no-shows et ouvre votre agenda en ligne 24h/24. Démarrage accompagné en 48h.</p>
+        <div class="hero-stats">
+          <div class="hstat"><div class="n">+<em>300</em></div><div class="l">Praticiens actifs</div></div>
+          <div class="hstat"><div class="n"><em>-62%</em></div><div class="l">de no-shows</div></div>
+          <div class="hstat"><div class="n"><em>48h</em></div><div class="l">de mise en route</div></div>
+        </div>
+      </div>
+
+      <div class="form-card" id="inscription">
+        <h3>Testez SOPNEA gratuitement</h3>
+        <p class="fc-sub">30 jours offerts · Sans carte bancaire · Accès immédiat</p>
+
+        <!-- ==== ZONE FORMULAIRE GHL ====
+             Remplacez ce bloc form par l'embed du formulaire GoHighLevel,
+             OU conservez ces champs et mappez-les sur les Custom Fields GHL :
+             full_name / email / specialite / ville
+        -->
+        <form id="sopnea-form" onsubmit="return false;">
+          <div class="field">
+            <label for="full_name">Prénom & Nom</label>
+            <input type="text" id="full_name" name="full_name" placeholder="Dr. Martin Dupont" required>
+          </div>
+          <div class="field">
+            <label for="email">Email professionnel</label>
+            <input type="email" id="email" name="email" placeholder="contact@cabinet.fr" required>
+          </div>
+          <div class="field">
+            <label for="specialite">Spécialité</label>
+            <select id="specialite" name="specialite" required>
+              <option value="">Sélectionnez...</option>
+              <option>Médecin généraliste</option>
+              <option>Spécialiste</option>
+              <option>Chirurgien</option>
+              <option>Kinésithérapeute</option>
+              <option>Dentiste</option>
+              <option>Autre profession de santé</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="ville">Ville</label>
+            <input type="text" id="ville" name="ville" placeholder="Paris, Lyon, Marseille..." required>
+          </div>
+          <button type="submit" class="btn-primary">Je démarre mon essai gratuit →</button>
+        </form>
+
+        <div class="fc-trust">
+          <span><span class="check">✓</span> Sans engagement</span>
+          <span><span class="check">✓</span> Données sécurisées</span>
+          <span><span class="check">✓</span> Support inclus</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="sec-head">
+        <span class="tag">Le constat</span>
+        <h2>1 rendez-vous sur 5 n'est jamais honoré.</h2>
+        <p>Sur un agenda de 30 créneaux par semaine, ce sont 6 patients qui s'évaporent. Sans rappel, sans système, sans visibilité.</p>
+      </div>
+      <div class="ps-grid">
+        <div class="ps-col problem">
+          <h4><span class="ps-icon">✕</span> Sans SOPNEA</h4>
+          <ul class="list">
+            <li>Créneaux non honorés en silence, revenus perdus</li>
+            <li>Secrétaire débordée au téléphone toute la journée</li>
+            <li>Doublons, oublis, erreurs de saisie d'agenda</li>
+            <li>Aucune prise de RDV en dehors des heures d'ouverture</li>
+            <li>Patients captés par les confrères mieux référencés</li>
+          </ul>
+        </div>
+        <div class="ps-col solution">
+          <h4><span class="ps-icon">✓</span> Avec SOPNEA</h4>
+          <ul class="list">
+            <li>Rappels SMS & email automatiques = -60% de no-shows</li>
+            <li>Prise de RDV 24h/24 en ligne, sur tout appareil</li>
+            <li>Synchronisation de l'agenda en temps réel</li>
+            <li>Créneau libéré automatiquement si annulation</li>
+            <li>Tableau de bord patients & historique centralisé</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how">
+    <div class="container">
+      <div class="sec-head">
+        <span class="tag">Démarrage en 48h</span>
+        <h2>Trois étapes, zéro complexité.</h2>
+        <p>Vous n'avez rien à installer. On s'occupe de la mise en place avec vous.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-n">1</div>
+          <h5>Vous vous inscrivez</h5>
+          <p>Créez votre espace en 2 minutes. Importez vos patients ou démarrez de zéro.</p>
+        </div>
+        <div class="step">
+          <div class="step-n">2</div>
+          <h5>On configure pour vous</h5>
+          <p>L'équipe Full Impulsion&trade; active vos rappels et synchronise votre agenda en 48h.</p>
+        </div>
+        <div class="step">
+          <div class="step-n">3</div>
+          <h5>Votre agenda se remplit</h5>
+          <p>Vos patients réservent en ligne, les no-shows disparaissent. Vous gagnez du temps.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testi">
+    <div class="container">
+      <div class="quote-box">
+        <div class="q">"En 3 semaines avec SOPNEA, mes créneaux vides ont disparu. Je gagne <em>2h par jour</em> que ma secrétaire ne passe plus au téléphone."</div>
+        <div class="author">
+          <div class="avatar">CV</div>
+          <div class="meta">
+            <div class="name">Dr. Claire V.</div>
+            <div class="role">Médecin généraliste · Lyon</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ref">
+    <div class="container">
+      <div class="sec-head">
+        <span class="tag">Programme de parrainage</span>
+        <h2>Parrainez un confrère, gagnez des mois gratuits.</h2>
+        <p>Dès votre inscription, recevez un lien unique. Chaque confrère qui rejoint SOPNEA vous rapproche d'un nouveau palier.</p>
+      </div>
+      <div class="ref-grid">
+        <div class="ref-card"><div class="rt">Starter</div><div class="rn">3<small>filleuls</small></div><div class="rl">1 mois offert + badge officiel</div></div>
+        <div class="ref-card"><div class="rt">Référent</div><div class="rn">10<small>filleuls</small></div><div class="rl">Commission 20% récurrente</div></div>
+        <div class="ref-card"><div class="rt">Expert</div><div class="rn">25<small>filleuls</small></div><div class="rl">Statut Partenaire Officiel</div></div>
+        <div class="ref-card"><div class="rt">Ambassadeur</div><div class="rn">50+<small>filleuls</small></div><div class="rl">Revenue share national</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="container">
+      <h2>Votre agenda mérite mieux qu'un téléphone qui sonne.</h2>
+      <p>Rejoignez les 300+ praticiens qui ont repris le contrôle de leur temps avec SOPNEA.</p>
+      <a href="#inscription" class="btn-white">Démarrer mon essai gratuit 30 jours →</a>
+      <div class="micro">Sans carte bancaire · Sans engagement · Mise en route en 48h</div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="logo"><svg class="logo-mark" viewBox="310 380 680 540" xmlns="http://www.w3.org/2000/svg" aria-label="SOPNEA" style="width:26px"><polygon points="320,455 645,388 905,395 885,700 978,905 845,770 360,878" fill="#A18CF5"/></svg>SOPNEA<span class="dot"></span></div>
+      <div>Logiciel de prise de RDV médical · Déployé par Full Impulsion&trade;</div>
+      <div style="margin-top:8px;opacity:.6">© 2026 SOPNEA — Tous droits réservés</div>
+    </div>
+  </footer>
+
+<script>
+document.getElementById('sopnea-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  var data = {
+    full_name: document.getElementById('full_name').value,
+    email: document.getElementById('email').value,
+    specialite: document.getElementById('specialite').value,
+    ville: document.getElementById('ville').value,
+    source: 'landing_sopnea'
+  };
+  /* ===== Décommentez et remplacez par votre webhook GHL =====
+  fetch('https://services.leadconnectorhq.com/hooks/VOTRE_WEBHOOK_ID', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(data)
+  }).then(function(){ window.location.href = '/merci'; })
+    .catch(function(){ alert('Une erreur est survenue, réessayez.'); });
+  */
+  console.log('Lead capturé :', data);
+  alert('Démo : lead capturé. Connectez ce formulaire à GHL (voir commentaires dans le code) puis redirigez vers votre page de remerciement.');
+});
+</script>
+</body>
+</html>
