@@ -319,16 +319,26 @@ document.getElementById('sopnea-form').addEventListener('submit', function(e){
     ville: document.getElementById('ville').value,
     source: 'landing_sopnea'
   };
-  /* ===== Décommentez et remplacez par votre webhook GHL =====
-  fetch('https://services.leadconnectorhq.com/hooks/VOTRE_WEBHOOK_ID', {
+  /* ===== Remplacez l'URL par votre webhook GHL =====
+     Copiez l'URL complète depuis GHL > Automations > Inbound Webhook
+  */
+  var webhookURL = 'https://services.leadconnectorhq.com/hooks/VOTRE_WEBHOOK_ID';
+
+  var btn = document.querySelector('.btn-primary');
+  btn.disabled = true;
+  btn.textContent = 'Envoi en cours…';
+
+  fetch(webhookURL, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(data)
-  }).then(function(){ window.location.href = '/merci'; })
-    .catch(function(){ alert('Une erreur est survenue, réessayez.'); });
-  */
-  console.log('Lead capturé :', data);
-  alert('Démo : lead capturé. Connectez ce formulaire à GHL (voir commentaires dans le code) puis redirigez vers votre page de remerciement.');
+  })
+  .then(function(){ window.location.href = 'merci.html'; })
+  .catch(function(){
+    btn.disabled = false;
+    btn.textContent = 'Je démarre mon essai gratuit →';
+    alert('Une erreur est survenue, veuillez réessayer.');
+  });
 });
 </script>
 </body>
