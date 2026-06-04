@@ -160,38 +160,24 @@
         <h3>Testez SOPNEA gratuitement</h3>
         <p class="fc-sub">30 jours offerts · Sans carte bancaire · Accès immédiat</p>
 
-        <!-- ==== ZONE FORMULAIRE GHL ====
-             Remplacez ce bloc form par l'embed du formulaire GoHighLevel,
-             OU conservez ces champs et mappez-les sur les Custom Fields GHL :
-             full_name / email / specialite / ville
-        -->
-        <form id="sopnea-form" onsubmit="return false;">
-          <div class="field">
-            <label for="full_name">Prénom & Nom</label>
-            <input type="text" id="full_name" name="full_name" placeholder="Dr. Martin Dupont" required>
-          </div>
-          <div class="field">
-            <label for="email">Email professionnel</label>
-            <input type="email" id="email" name="email" placeholder="contact@cabinet.fr" required>
-          </div>
-          <div class="field">
-            <label for="specialite">Spécialité</label>
-            <select id="specialite" name="specialite" required>
-              <option value="">Sélectionnez...</option>
-              <option>Médecin généraliste</option>
-              <option>Spécialiste</option>
-              <option>Chirurgien</option>
-              <option>Kinésithérapeute</option>
-              <option>Dentiste</option>
-              <option>Autre profession de santé</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="ville">Ville</label>
-            <input type="text" id="ville" name="ville" placeholder="Paris, Lyon, Marseille..." required>
-          </div>
-          <button type="submit" class="btn-primary">Je démarre mon essai gratuit →</button>
-        </form>
+        <iframe
+          src="https://api.leadconnectorhq.com/widget/form/DbfBFdNsIoHRH09HiitZ"
+          style="width:100%;height:714px;border:none;border-radius:4px"
+          id="inline-DbfBFdNsIoHRH09HiitZ"
+          data-layout="{'id':'INLINE'}"
+          data-trigger-type="alwaysShow"
+          data-trigger-value=""
+          data-activation-type="alwaysActivated"
+          data-activation-value=""
+          data-deactivation-type="neverDeactivate"
+          data-deactivation-value=""
+          data-form-name="Marketing Form - SOPNEA"
+          data-height="714"
+          data-layout-iframe-id="inline-DbfBFdNsIoHRH09HiitZ"
+          data-form-id="DbfBFdNsIoHRH09HiitZ"
+          title="Marketing Form - SOPNEA">
+        </iframe>
+        <script src="https://link.msgsndr.com/js/form_embed.js"></script>
 
         <div class="fc-trust">
           <span><span class="check">✓</span> Sans engagement</span>
@@ -309,37 +295,5 @@
     </div>
   </footer>
 
-<script>
-document.getElementById('sopnea-form').addEventListener('submit', function(e){
-  e.preventDefault();
-  var data = {
-    full_name: document.getElementById('full_name').value,
-    email: document.getElementById('email').value,
-    specialite: document.getElementById('specialite').value,
-    ville: document.getElementById('ville').value,
-    source: 'landing_sopnea'
-  };
-  /* ===== Remplacez l'URL par votre webhook GHL =====
-     Copiez l'URL complète depuis GHL > Automations > Inbound Webhook
-  */
-  var webhookURL = 'https://services.leadconnectorhq.com/hooks/VOTRE_WEBHOOK_ID';
-
-  var btn = document.querySelector('.btn-primary');
-  btn.disabled = true;
-  btn.textContent = 'Envoi en cours…';
-
-  fetch(webhookURL, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(data)
-  })
-  .then(function(){ window.location.href = 'merci.html'; })
-  .catch(function(){
-    btn.disabled = false;
-    btn.textContent = 'Je démarre mon essai gratuit →';
-    alert('Une erreur est survenue, veuillez réessayer.');
-  });
-});
-</script>
 </body>
 </html>
